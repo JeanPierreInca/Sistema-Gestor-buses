@@ -1,4 +1,3 @@
-// src/components/BusTable.tsx
 import React, { useState, useEffect } from 'react';
 import { Bus } from '../types/types';
 
@@ -8,21 +7,21 @@ const BusTable: React.FC = () => {
   // Fetching de datos
   useEffect(() => {
     fetch('http://localhost:8005/bus')
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
         return response.json();
       })
-      .then(data => setBuses(data))
-      .catch(error => console.error('Error fetching buses:', error));
+      .then((data) => setBuses(data))
+      .catch((error) => console.error('Error fetching buses:', error));
   }, []);
 
   return (
-    <div>
-      <h2>Lista de Buses</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse'}}>
-        <thead>
+    <div className="container mt-4">
+      <h2 className="text-center mb-4">Lista de Buses</h2>
+      <table className="table table-striped table-hover table-bordered">
+        <thead className="thead-dark">
           <tr>
             <th>ID</th>
             <th>Número de Bus</th>
@@ -35,10 +34,8 @@ const BusTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {buses.map(bus => (
-            <tr
-              key={bus.id}
-             >
+          {buses.map((bus) => (
+            <tr key={bus.id}>
               <td>{bus.id}</td>
               <td>{bus.numeroBus}</td>
               <td>{bus.placa}</td>
@@ -51,15 +48,7 @@ const BusTable: React.FC = () => {
                   onClick={() =>
                     alert(`Detalles del Bus:\n${JSON.stringify(bus, null, 2)}`)
                   }
-                  style={{
-                    padding: '5px 10px',
-                    cursor: 'pointer',
-                    backgroundColor: '#007bff',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '5px',
-                    
-                  }}
+                  className="btn btn-primary btn-sm"
                 >
                   Ver Detalles
                 </button>
