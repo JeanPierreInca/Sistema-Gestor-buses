@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Pagination from './pagination'; // Importa el componente de paginación
 import { Bus } from '../types/types';
 
 const BusTable: React.FC = () => {
   const [buses, setBuses] = useState<Bus[]>([]);
+  const [currentPage, setCurrentPage] = useState(1); // Página actual
+  const [busesPerPage] = useState(5); // Número de buses por página
+
 
   // Fetching de datos
   useEffect(() => {
@@ -16,6 +20,17 @@ const BusTable: React.FC = () => {
       .then((data) => setBuses(data))
       .catch((error) => console.error('Error fetching buses:', error));
   }, []);
+
+
+  // Calcular los datos de la página actual
+  const indexOfLastBus = currentPage * busesPerPage;
+  const indexOfFirstBus = indexOfLastBus - busesPerPage;
+  const currentBuses = buses.slice(indexOfFirstBus, indexOfLastBus);
+
+  // Cambiar la página
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="container mt-4">
@@ -34,7 +49,7 @@ const BusTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {buses.map((bus) => (
+          {currentBuses.map((bus) => (
             <tr key={bus.id}>
               <td>{bus.id}</td>
               <td>{bus.numeroBus}</td>
@@ -57,6 +72,12 @@ const BusTable: React.FC = () => {
           ))}
         </tbody>
       </table>
+       {/* Componente de Paginación */}
+       <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(buses.length / busesPerPage)}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
